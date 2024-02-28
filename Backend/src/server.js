@@ -8,12 +8,15 @@ import 'dotenv/config';
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+    signatureVersion: 'v4', // VERY IMPORTANT TO KEEP TO BE ABLE TO ACCESS IMAGES
 });
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 const s3 = new AWS.S3();
 
+
+// Upload a file to AWS S3 Bucket specified in .env
 const uploadFile = (image) => {
     const fileContent = fs.readFileSync(image.path);
 
@@ -33,7 +36,9 @@ const uploadFile = (image) => {
     });
 };
 
-const retrieveImages = () => {
+
+// Return an array of object keys -> Identifier for images in bucket
+const getImageNames = () => {
     const params = {
         Bucket: process.env.AWS_BUCKET_NAME,
     }
@@ -52,16 +57,59 @@ const retrieveImages = () => {
 }
 
 
-app.get('/api/retrieveImages', (req, res) => {
+const retrieveImages = async() => {
+
+
+    // Step 2: Retrieve the list of image names
+    return getImageNames()
+        .then(imageNamesArray => {
+
+            const signedUrlsPromises = imageNamesArray.map(key => {
+
+                // Set the parameters
+                const signedUrlParams = {
+                    Bucket: process.env.AWS_BUCKET_NAME,
+                    Key: key,
+                    Expires: 60 // URL expiration time in seconds
+                };
+
+                return new Promise((resolve, reject) => {
+                    
+                    // Generate signed URLs for each key
+                    s3.getSignedUrl('getObject', signedUrlParams, (err, url) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(url);
+                        }
+                    });
+                });
+            });
+            return Promise.all(signedUrlsPromises);
+        })
+        .then(imageURLs => {
+            // Return the signed URLs
+            return imageURLs;
+        })
+        .catch(err => {
+            throw err; 
+        });
+}
+
+
+app.get('/api/retrieve-images', (req, res) => {
+
     retrieveImages()
-    .then( array => {
-        res.send(array);
+    .then(URLs => {
+        res.send(URLs);
     })
     .catch(err => {
-        console.error('Error retrieving images', err);
-    })
+        console.error(err); 
+    });
+    
 })
 
+// Upload images into the AWS S3 Bucket
 app.post('/upload', upload.single('image'), (req, res) => {
     const image = req.file;
 

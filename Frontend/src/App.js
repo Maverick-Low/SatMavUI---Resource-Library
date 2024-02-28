@@ -4,15 +4,14 @@ import { useEffect, useState } from 'react';
 
 function App() {
 
-    const [images, setImages] = useState([]);
+    const [images, setImage] = useState([]);
 
     useEffect( () => {
         const retrieveImages = async() => {
-            const response = await axios.get('/api/retrieveImages');
-            const imagesDB = response.data; // Expect an array of image objects
-            setImages(imagesDB);
-            // Loop through images and display them;
-            console.log("IMAGES:", images);
+            const response = await axios.get('/api/retrieve-images');
+            const imagesDB = response.data; // An array of Signed URLs
+            console.log('ImagesDB:', imagesDB);
+            setImage(imagesDB);
         }
 
         retrieveImages();
@@ -27,8 +26,11 @@ function App() {
             </form>
             <ul>
                 {images.map((image, index) => (
-                    <li key={index}>{image}</li>
+                    <li key={index}>
+                        <img src = {image} alt = 'lol' ></img>
+                    </li>
                 ))}
+
             </ul>
         </>
         
