@@ -12,6 +12,9 @@ package-lock.json
 # production
 /build
 
+# temp files
+/uploads
+
 # misc
 .DS_Store
 .env
