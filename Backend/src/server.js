@@ -33,9 +33,34 @@ const uploadFile = (image) => {
     });
 };
 
-// app.get('/', (req, res) => {
-//     res.send('LOOL');
-// })
+const retrieveImages = () => {
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+    }
+
+    return new Promise( (resolve, reject) => {
+        s3.listObjectsV2(params, (err, data) => {
+            if(err) {
+                reject(err);
+            }
+            else {
+                const array = data.Contents.map(object => object.Key);
+                resolve(array);   
+            }
+        });
+    })
+}
+
+
+app.get('/api/retrieveImages', (req, res) => {
+    retrieveImages()
+    .then( array => {
+        res.send(array);
+    })
+    .catch(err => {
+        console.error('Error retrieving images', err);
+    })
+})
 
 app.post('/upload', upload.single('image'), (req, res) => {
     const image = req.file;
