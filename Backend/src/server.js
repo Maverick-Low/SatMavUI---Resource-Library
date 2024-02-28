@@ -3,6 +3,7 @@ import multer from 'multer';
 import AWS from 'aws-sdk';
 import fs from 'fs';
 import 'dotenv/config';
+import {db, connectToDb} from './db.js';
 
 
 AWS.config.update({
@@ -59,9 +60,7 @@ const getImageNames = () => {
 
 const retrieveImages = async() => {
 
-
-    // Step 2: Retrieve the list of image names
-    return getImageNames()
+    return getImageNames() // Retrieve list of image names
         .then(imageNamesArray => {
 
             const signedUrlsPromises = imageNamesArray.map(key => {
@@ -96,7 +95,7 @@ const retrieveImages = async() => {
         });
 }
 
-
+// Retrieve images from AWS
 app.get('/api/retrieve-images', (req, res) => {
 
     retrieveImages()
@@ -125,6 +124,9 @@ app.post('/upload', upload.single('image'), (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 // console.log('Succesfully connected to database');
-app.listen(3000, () => {
-    console.log('Server is listening on port ' + PORT);
-});
+connectToDb( () => {
+    console.log('Succesfully connected to database');
+    app.listen(PORT, () => {
+        console.log('Server is listening on port ' + PORT);
+    });
+})
