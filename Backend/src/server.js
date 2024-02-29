@@ -108,6 +108,20 @@ app.get('/api/retrieve-images', (req, res) => {
     
 })
 
+app.get('/api/retrieve-websites', async (req, res) => {
+
+    const name = "Typescale";
+    // 1. Query the database
+    const websites = await db.collection('websites').findOne({name});
+    if (websites) {
+        console.log(websites);
+        res.send(websites);
+    }
+    else {
+        res.sendStatus(404);
+    }
+})
+
 // Upload images into the AWS S3 Bucket
 app.post('/upload', upload.single('image'), (req, res) => {
     const image = req.file;

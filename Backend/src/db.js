@@ -10,7 +10,7 @@ async function connectToDb(cb) {
     await client.connect();
 
     // Update the upvotes in the database
-    db = client.db('websites-db'); 
+    db = client.db('satmav-db'); 
     cb();
 }
 

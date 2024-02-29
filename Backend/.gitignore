@@ -15,6 +15,9 @@ package-lock.json
 # temp files
 /uploads
 
+# mongo-db-data
+/mongo-db-data
+
 # misc
 .DS_Store
 .env

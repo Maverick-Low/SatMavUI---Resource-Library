@@ -1,6 +1,7 @@
 import './App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import WebsiteCardListComponent from './Components/WebsiteCardListComponent';
 
 function App() {
 
@@ -19,7 +20,8 @@ function App() {
    
 
     return (
-        <>
+        <>  
+            <WebsiteCardListComponent/>
             <form action="/upload" method="POST" encType="multipart/form-data">
                 <input type="file" name="image" />
                 <button type="submit">Upload</button>
