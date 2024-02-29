@@ -108,10 +108,10 @@ app.get('/api/retrieve-images', (req, res) => {
     
 })
 
+// Query the database and retrieve all documents in website collection
 app.get('/api/retrieve-websites', async (req, res) => {
 
-    // 1. Query the database
-    const websites = await db.collection('websites').find({}).toArray();;
+    const websites = await db.collection('websites').find({}).toArray();
     if (websites) {
         res.send(websites);
     }
@@ -120,11 +120,18 @@ app.get('/api/retrieve-websites', async (req, res) => {
     }
 })
 
+app.get('/api/retrieve-corresponding-images', async (req, res) => {
+    const names = req.query.names;
+    console.log("names",names);
+    res.send("SUCCESS");
+})
+
+
 // Upload images into the AWS S3 Bucket
 app.post('/upload', upload.single('image'), (req, res) => {
     const image = req.file;
 
-    if(image && (image.mimetype === 'image/png' || image.mimetype === 'image/jpg' )) {
+    if(image && (image.mimetype === 'image/png' || image.mimetype === 'image/jpg'|| image.mimetype === 'image/jpeg' )) {
         uploadFile(image);
         res.send('Image successfully uploaded');
     } 
