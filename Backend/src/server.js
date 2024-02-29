@@ -110,11 +110,9 @@ app.get('/api/retrieve-images', (req, res) => {
 
 app.get('/api/retrieve-websites', async (req, res) => {
 
-    const name = "Typescale";
     // 1. Query the database
-    const websites = await db.collection('websites').findOne({name});
+    const websites = await db.collection('websites').find({}).toArray();;
     if (websites) {
-        console.log(websites);
         res.send(websites);
     }
     else {
@@ -137,7 +135,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// console.log('Succesfully connected to database');
 connectToDb( () => {
     console.log('Succesfully connected to database');
     app.listen(PORT, () => {
