@@ -12,7 +12,6 @@ import { useState, useEffect } from 'react';
 function WebsiteCardListComponent() {
 
     const [websites, setWebsites] = useState([]);
-    const [images, setImages] = useState([]);
 
     // Retrieve database information and corresponding images
     useEffect( () => {
@@ -20,10 +19,7 @@ function WebsiteCardListComponent() {
         const loadWebsiteCards = async() => {
             const response = await axios.get('/api/retrieve-websites');
             const websiteDataDB = response.data.websites;
-            setWebsites(websiteDataDB);
-            
-            const imageDataDB =  response.data.images;
-            setImages(imageDataDB);
+            setWebsites(websiteDataDB);   
 
             return websiteDataDB;
         }
@@ -39,15 +35,8 @@ function WebsiteCardListComponent() {
                     <a key={website.name} className='website-card' target='blank' href = {`https://${website.URL}`}>
                         <h3> {website.name} </h3>
                         <p> {website.description} </p>
+                        <img src = {website.image} alt = '' ></img>
                     </a> ))}
-            </ul>
-            <ul>
-                {images.map((image, index) => (
-                    <li key={index}>
-                        <img src = {image} alt = '' ></img>
-                    </li>
-                ))}
-
             </ul>
         </>
     )

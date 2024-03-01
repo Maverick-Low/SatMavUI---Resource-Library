@@ -130,11 +130,16 @@ app.get('/api/retrieve-websites', async (req, res) => {
         // Retrieve corresponding images from AWS S3 Bucket
         retrieveImages(namesArray)
         .then(URLs => {
+
+            // Find corresponding website and attach image URL to website object
             const responseData = {
-                websites: websites,
-                images: URLs,
-            }
+                websites: websites.map( (website) => ({
+                    ...website,
+                    image: URLs.find(url => url.includes(website.name))// Assign the image URL to the corresponding website
+                }))
+            };
             res.send(responseData);
+            
         })
         .catch(err => {
             console.error(err); 
