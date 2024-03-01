@@ -13,45 +13,23 @@ function WebsiteCardListComponent() {
 
     const [websites, setWebsites] = useState([]);
     const [images, setImages] = useState([]);
-    const [websiteNames, setWebsiteNames] = useState([]);
 
-    // Retrieve database information
+    // Retrieve database information and corresponding images
     useEffect( () => {
 
         const loadWebsiteCards = async() => {
             const response = await axios.get('/api/retrieve-websites');
-            const websiteDataDB = response.data;
+            const websiteDataDB = response.data.websites;
             setWebsites(websiteDataDB);
             
-            // Store all the names in separate array
-            const namesArray = websiteDataDB.map(website => website.name);
-            setWebsiteNames(namesArray);
+            const imageDataDB =  response.data.images;
+            setImages(imageDataDB);
 
             return websiteDataDB;
         }
 
-        const retrieveImages = async() => {
-            const response = await axios.get('/api/retrieve-images');
-            const imagesDB = response.data; // An array of Signed URLs
-            setImages(imagesDB);
-        }
-
-        retrieveImages();
         loadWebsiteCards();
     }, []);
-
-    // Retrieve the images when the website names have been loaded into the array
-    useEffect(() => {
-        const retrieveCorrespondingImages = async() => {
-            const response = await axios.get('/api/retrieve-corresponding-images', 
-                {params: {names: websiteNames}})
-            console.log(response);
-        } 
-
-        if (websiteNames.length > 0) {
-          retrieveCorrespondingImages();
-        }
-      }, [websiteNames]);
 
     return (
         <>
@@ -62,6 +40,14 @@ function WebsiteCardListComponent() {
                         <h3> {website.name} </h3>
                         <p> {website.description} </p>
                     </a> ))}
+            </ul>
+            <ul>
+                {images.map((image, index) => (
+                    <li key={index}>
+                        <img src = {image} alt = '' ></img>
+                    </li>
+                ))}
+
             </ul>
         </>
     )

@@ -57,10 +57,33 @@ const getImageNames = () => {
     })
 }
 
+const getSpecificImageNames = (namesArray) => {
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+    }
 
-const retrieveImages = async() => {
+    return new Promise( (resolve, reject) => {
+        s3.listObjectsV2(params, (err, data) => {
+            if(err) {
+                reject(err);
+            }
+            else {
+                const array = namesArray? 
+                    data.Contents
+                    .map(object => object.Key)
+                    .filter(key => namesArray.some(name => key.includes(name)))
+                    : 
+                    data.Contents.map(object => object.Key);
+                resolve(array);   
+            }
+        });
+    })
+}
 
-    return getImageNames() // Retrieve list of image names
+
+const retrieveImages = async(namesArray) => {
+
+    return getSpecificImageNames(namesArray) // Retrieve list of image names / object keys
         .then(imageNamesArray => {
 
             const signedUrlsPromises = imageNamesArray.map(key => {
@@ -95,35 +118,31 @@ const retrieveImages = async() => {
         });
 }
 
-// Retrieve images from AWS
-app.get('/api/retrieve-images', (req, res) => {
-
-    retrieveImages()
-    .then(URLs => {
-        res.send(URLs);
-    })
-    .catch(err => {
-        console.error(err); 
-    });
-    
-})
 
 // Query the database and retrieve all documents in website collection
 app.get('/api/retrieve-websites', async (req, res) => {
 
-    const websites = await db.collection('websites').find({}).toArray();
-    if (websites) {
-        res.send(websites);
+    const websites = await db.collection('websites').find({}).toArray(); // Array of website objects
+    const namesArray = websites.map(website => website.name); // Get names of retrieved websites
+
+
+    if(websites) {
+        // Retrieve corresponding images from AWS S3 Bucket
+        retrieveImages(namesArray)
+        .then(URLs => {
+            const responseData = {
+                websites: websites,
+                images: URLs,
+            }
+            res.send(responseData);
+        })
+        .catch(err => {
+            console.error(err); 
+        });
     }
     else {
         res.sendStatus(404);
     }
-})
-
-app.get('/api/retrieve-corresponding-images', async (req, res) => {
-    const names = req.query.names;
-    console.log("names",names);
-    res.send("SUCCESS");
 })
 
 
