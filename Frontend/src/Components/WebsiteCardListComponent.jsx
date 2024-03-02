@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import './WebsiteCardListComponent.css';
 
 // Website Object Properties
 // name: string  --> Image name stored in AWS s3 will match this +.png or .jpg
@@ -30,14 +31,21 @@ function WebsiteCardListComponent() {
     return (
         <>
             <h1> Websites </h1>
-            <ul>
-                {websites.map(website => (
-                    <a key={website.name} className='website-card' target='blank' href = {`https://${website.URL}`}>
-                        <h3> {website.name} </h3>
-                        <p> {website.description} </p>
-                        <img src = {website.image} alt = '' ></img>
-                    </a> ))}
-            </ul>
+            <div className="website-list-wrapper">
+                <ul className='website-list'>
+                    {websites.map(website => (
+                        <a key={website.name} className='website-card' target='blank' href = {`https://${website.URL}`}>
+                            <div className="image-section">
+                                <div className="image-container">
+                                    <img src = {website.image} alt = '' ></img>
+                                </div>
+                            </div>
+                            <h3> {website.name} </h3>
+                            <p> {website.description} </p>
+                        </a> ))}
+                </ul>
+            </div>
+            
         </>
     )
 }

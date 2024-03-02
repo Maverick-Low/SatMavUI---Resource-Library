@@ -1,0 +1,52 @@
+.website-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    /* justify-content: space-evenly;\ */
+    gap: 24px;
+    overflow: hidden;
+    padding: 0px;
+    background-color: aqua;
+}
+
+.website-card {
+    width: clamp(300px, 350px, 400px);
+    overflow: hidden;
+    background-color: var(--darkGrey);
+    text-decoration: none;
+    border-radius: 20px;
+
+    h3 {
+        padding: 0px 24px;
+        font-size: 24px;
+        color: #f7f7f7;
+    }
+
+    p {
+        font-size: 16px;
+        padding: 0px 24px;
+        color: #f7f7f7;
+    }
+}
+
+.image-section {
+    overflow: hidden;
+    height: 300px;
+    background-color: darkgrey;
+}
+
+.image-container {
+    transform: translateY(5%);
+    width: 90%;
+    height: 90%;
+    overflow: hidden;
+    margin: auto;
+}
+
+.image-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* contain maintains aspect ratio, cover zooms and crops image to fit*/
+}
+
