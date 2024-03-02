@@ -1,3 +1,31 @@
 :root {
     --darkGrey: #101214;
+    --atomBlue: #282C34;
+    --atomGrey: #ABB2BF;
+    --atomRed: #E06C75;
+    --atomYellow: #E5C07B;
+    --atomGreen: #98C379;
+    --atomLightBlue: #61AFEF;
+    --atomPurple: #C678DD;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('./fonts/JetBrainsMono/JetBrainsMono-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('./fonts/JetBrainsMono/JetBrainsMono-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('./fonts/JetBrainsMono/JetBrainsMono-Italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
 }
