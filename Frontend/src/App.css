@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     --darkGrey: #101214;
     --atomBlue: #282C34;
