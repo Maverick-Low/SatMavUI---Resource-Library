@@ -2,8 +2,9 @@
     width: 300px;
     /* height: 400px; */
     margin: 0 auto;
-    background-color: #24233b;
+    background-color: var(--atomBlue);
     border-radius: 20px;
+    border: 2px double var(--atomGrey);
     z-index: 1;
     box-shadow: 0px 10px 10px rgb(73, 70, 92);
     transition: 0.5s;
@@ -34,15 +35,15 @@
 }
   
 .red {
-    background-color: #ff605c;
+    background-color: var(--atomRed);
 }
   
 .yellow {
-    background-color: #ffbd44;
+    background-color: var(--atomYellow);
 }
   
 .green {
-    background-color: #00ca4e;
+    background-color: var(--atomGreen);
 }
   
 .header {
@@ -54,29 +55,30 @@
 .website-card {
     width: 100%;
     overflow: hidden;
-    background-color: var(--darkGrey);
     text-decoration: none;
 
-    h3 {
-        padding: 0px 24px;
+    h3 { 
+        margin: 0px 24px;
+        margin-top: 8px;
         font-size: 24px;
         font-family: 'JetBrains Mono', monospace;
-        color: #f7f7f7;
+        font-weight: bold;
+        color: white;
     }
 
     p {
         font-size: 16px;
         font-family: 'JetBrains Mono', monospace;
-        padding: 0px 24px;
-        color: #f7f7f7;
+        margin: 4px 24px 8px;
+        color: var(--atomGrey);
     }
 }
 
 .image-section {
     overflow: hidden;
     height: 300px;
-    background-color: darkgrey;
-    margin: auto;
+    background-color: #20242a;
+    border-radius: 0 0 10px 10px;
 }
 
 .image-container {
