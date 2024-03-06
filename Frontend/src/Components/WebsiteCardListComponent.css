@@ -2,10 +2,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: flex-start;
     width: 100%;
-    /* justify-content: space-evenly;\ */
-    /* gap: 24px; */
-    /* overflow-y: hidden; */
-    padding: 0px;
+    gap: 24px;
 }
 

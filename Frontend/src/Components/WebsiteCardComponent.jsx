@@ -17,7 +17,7 @@ function WebsiteCard( {website} ) {
 
     return (
         
-        <div class="card">
+        <a class="card" target='blank' href = {`https://${website.URL}`}>
             <div class="header">
                 <div class="top">
                     <div class="circle">
@@ -32,16 +32,16 @@ function WebsiteCard( {website} ) {
                 </div>
             </div>
 
-            <a key={website.name} className='website-card' target='blank' href = {`https://${website.URL}`}>
-                <div className="image-section">
+            <div key={website.name} className='website-details'>
+               
                     <div className="image-container">
                         <img src = {website.image} alt = '' ></img>
                     </div>
-                </div>
-                <h3> {website.name} </h3>
+                
+                <h3> {website.name} </h3> 
                 <p> {website.description} </p>
-            </a>
-        </div>
+            </div>
+        </a>
     )
 }
 
