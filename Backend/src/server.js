@@ -67,11 +67,11 @@ const getSpecificImageNames = (namesArray) => {
             if(err) {
                 reject(err);
             }
-            else {
+            else {    
                 const array = namesArray? 
                     data.Contents
                     .map(object => object.Key)
-                    .filter(key => namesArray.some(name => key.includes(name)))
+                    .filter(key => namesArray.some(name => key.includes(name.replace(/ /g, "")))) // Only want the corresponding images to the website - remove spaces from name
                     : 
                     data.Contents.map(object => object.Key);
                 resolve(array);   
@@ -84,7 +84,7 @@ const getSpecificImageNames = (namesArray) => {
 const retrieveImages = async(namesArray) => {
 
     return getSpecificImageNames(namesArray) // Retrieve list of image names / object keys
-        .then(imageNamesArray => {
+        .then(imageNamesArray => {           // Generate a signed URL for each image
 
             const signedUrlsPromises = imageNamesArray.map(key => {
 
@@ -110,8 +110,7 @@ const retrieveImages = async(namesArray) => {
             return Promise.all(signedUrlsPromises);
         })
         .then(imageURLs => {
-            // Return the signed URLs
-            return imageURLs;
+            return imageURLs;  // Return the signed URLs
         })
         .catch(err => {
             throw err; 
@@ -125,7 +124,6 @@ app.get('/api/retrieve-websites', async (req, res) => {
     const websites = await db.collection('websites').find({}).toArray(); // Array of website objects
     const namesArray = websites.map(website => website.name); // Get names of retrieved websites
 
-
     if(websites) {
         // Retrieve corresponding images from AWS S3 Bucket
         retrieveImages(namesArray)
@@ -135,7 +133,7 @@ app.get('/api/retrieve-websites', async (req, res) => {
             const responseData = {
                 websites: websites.map( (website) => ({
                     ...website,
-                    image: URLs.find(url => url.includes(website.name))// Assign the image URL to the corresponding website
+                    image: URLs.find(url => url.includes(website.name.replace(/ /g, "")))// Assign the image URL to the corresponding website
                 }))
             };
             res.send(responseData);
